@@ -27,3 +27,27 @@
     (set-mark pt)))
 
 
+;; https://github.com/xahlee/lookup-word-on-internet/blob/master/xah-lookup.el
+;; Lookup command in wikipedia
+(defun my-lookup-wikipedia ()
+  "Look up the word under cursor in wikipedia. This command would switch to browser"
+  (interactive)
+  (let (word)
+    (setq word
+	  (if (use-region-p)
+	      (buffer-substring-no-properties (region-beginning) (region-end))
+	    (current-word)))
+    (setq word (replace-regexp-in-string " " "_" word))
+    (browse-url (concat "http://en.wikipedia.org/wiki/" word))
+    ))
+
+;; If I want to highlight message in certain files.
+(defun highlite-it ()
+  "Hight certain lines..."
+  (interactive)
+  (if (equal "log" (file-name-extension (buffer-file-name)))
+      (progn
+	(highlight-lines-matching-regexp "ERROR:" 'hi-red-b)
+	(highlight-lines-matching-regexp "NOTE:" 'hi-blue-b))))
+(add-hook 'find-file-hook 'highlite-it)
+
